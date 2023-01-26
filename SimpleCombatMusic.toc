@@ -1,5 +1,5 @@
-## Interface: 100002
-## Version: 1.0.0
+## Interface: 100005
+## Version: @project-version@
 ## Title: SimpleCombatMusic
 ## Notes: Combat Simple Music
 ## Author: Slouchy
