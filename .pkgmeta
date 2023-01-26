@@ -1,4 +1,1 @@
-﻿﻿package-as: SimpleCombatMusic
-
-move-folders:
-   SimpleCombatMusic/src: SimpleCombatMusic
+﻿﻿package-as: SimpleCombatMusic: move-folders: SimpleCombatMusic/src: SimpleCombatMusic
