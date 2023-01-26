@@ -1,7 +1,7 @@
 ## Interface: 100002
 ## Version: 1.0.0
-## Title: Simple Combat Music
-## Notes: Simple Combat Music
+## Title: SimpleCombatMusic
+## Notes: Combat Simple Music
 ## Author: Slouchy
 ## SavedVariables: SongCountTotal
 ## X-Curse-Project-ID: 815585
