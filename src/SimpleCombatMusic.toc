@@ -2,8 +2,9 @@
 ## Version: 1.0.0
 ## Title: Simple Combat Music
 ## Notes: Simple Combat Music
-## Author: YourName
+## Author: Slouchy
 ## SavedVariables: SongCountTotal
+## X-Curse-Project-ID: 815585
 
 SimpleCombatMusic.lua
 SimpleCombatMusic.xml
