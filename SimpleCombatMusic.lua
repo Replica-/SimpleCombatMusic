@@ -1,6 +1,5 @@
 local combatFlag = false
 local songId = false
-local defaultVol = '1'  -- GetCVar("Sound_MusicVolume")
 local stepSize = 0.2
 local fadeStep = 0.1
 local frame = nil
@@ -8,6 +7,7 @@ local frame = nil
 local function PlaySong(self, type)
 
 	if SongCountTotal == nil then
+		print "Simple Combat Music: Please set number in Addon Options"
 		return nil
 	end
 
@@ -30,7 +30,7 @@ local function OnAddonEvent(self, event, arg1)
 		helloFS:SetText("Song Count")
 
 		editFrame = CreateFrame("EditBox", nil, panel, "InputBoxTemplate");
-		editFrame:SetPoint("TOPLEFT", panel, 80, -19);
+		editFrame:SetPoint("TOPLEFT", panel, 123, -19);
 		editFrame:SetWidth(40);
 		editFrame:SetHeight(20);
 		editFrame:SetMovable(false);
@@ -41,12 +41,46 @@ local function OnAddonEvent(self, event, arg1)
 		if SongCountTotal ~= nil then
 			editFrame:SetText(SongCountTotal)
 		end
-	
+
 		editFrame:SetScript("OnTextChanged", function(self)
 		  local val = self:GetText()
 		  SongCountTotal = val
 		end)
+
+		local helloFSS = panel:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+		helloFSS:SetPoint("TOPLEFT", panel, 0, -60);
+		helloFSS:SetText("Combat Volume")
+
+		local MySlider = CreateFrame("Slider", "MySliderSimpleCombatMusic", panel, "OptionsSliderTemplate")
+		MySlider:SetWidth(200)
+		MySlider:SetHeight(20)
+		MySlider:SetOrientation('HORIZONTAL')
+		getglobal(MySlider:GetName() .. 'Low'):SetText('0%'); --Sets the left-side slider text (default is "Low").
+		getglobal(MySlider:GetName() .. 'High'):SetText('100%'); --Sets the right-side slider text (default is "High").
+		local formatted = string.format( "%.2f %%", SongCountMusicVolume*100)
+		getglobal(MySlider:GetName() .. 'Text'):SetText(formatted); --Sets the "title" text (top-centre of slider).
+		MySlider:SetMinMaxValues(0, 1)
+		MySlider:SetValueStep(0.1)
+		MySlider:Show()
+		MySlider:SetPoint("TOPLEFT", panel, 120, -59);
+
+		SongCountMusicVolume = tonumber(SongCountMusicVolume)
+		if SongCountMusicVolume == nil or SongCountMusicVolume > 1 or SongCountMusicVolume < 0 then
+			SongCountMusicVolume = 1
+		end
+
+		MySlider:SetValue(SongCountMusicVolume)
+			
+		MySlider:SetScript("OnValueChanged", function(self)
+		  local val = self:GetValue()
+		  SongCountMusicVolume = tonumber(val)
+		   
+			local formatted = string.format( "%.2f %%", SongCountMusicVolume*100)
+		  getglobal(MySlider:GetName() .. 'Text'):SetText(formatted); --Sets the "title" text (top-centre of slider).
+		end)
 	
+
+
 	elseif event == "PLAYER_LOGOUT" then
         -- Save the time at which the character logs out
         
@@ -87,7 +121,7 @@ local function tick(self)
 	end
 
 	-- We are playing a song but no longer in combat but we haven't faded completely
-	if (songId and combatFlag == true and currentVol < 1) then
+	if (songId and combatFlag == true and currentVol < SongCountMusicVolume) then
 		currentVol = currentVol + (stepSize *2)	
 		SetCVar("Sound_MusicVolume", currentVol)
 	end
@@ -97,7 +131,7 @@ local function tick(self)
 		if songId then
 			StopMusic()
 		end
-		SetCVar("Sound_MusicVolume", defaultVol)
+		SetCVar("Sound_MusicVolume", tostring(SongCountMusicVolume))
 		songId = false
 	end
 

@@ -1,9 +1,9 @@
 ## Interface: 100005
-## Version: @project-version@
+## Version: 1.0.7
 ## Title: SimpleCombatMusic
-## Notes: Combat Simple Music
+## Notes: Inspired by Van32 - Simple combat music addon!
 ## Author: Slouchy
-## SavedVariables: SongCountTotal
+## SavedVariables: SongCountTotal, SongCountMusicVolume
 ## X-Curse-Project-ID: 815585
 
 SimpleCombatMusic.lua
