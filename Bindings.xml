@@ -1,0 +1,5 @@
+<Bindings>
+	<Binding name="SIMPLECOMBATMUSIC_NEXTSONG" description="Next Song!" category="Simple Combat Music">
+		PlaySimpleCombatSong()
+	</Binding>
+</Bindings>

@@ -4,7 +4,9 @@ local stepSize = 0.2
 local fadeStep = 0.1
 local frame = nil
 
-local function PlaySong(self, type)
+BINDING_NAME_SIMPLECOMBATMUSIC_NEXTSONG = 'Play Next Song'	
+
+function PlaySong(self, type)
 
 	if SongCountTotal == nil then
 		print "Simple Combat Music: Please set number in Addon Options"
@@ -18,6 +20,11 @@ local function PlaySong(self, type)
 	local unitName = UnitName('target')
 	local bossMode = UnitIsBossMob('target')
 	return song
+end
+
+function PlaySimpleCombatSong() 
+	PlaySong()
+	print('Playing random song....')
 end
 
 local function OnAddonEvent(self, event, arg1)
