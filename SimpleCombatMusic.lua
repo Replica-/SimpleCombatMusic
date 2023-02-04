@@ -3,28 +3,33 @@ local songId = false
 local stepSize = 0.2
 local fadeStep = 0.1
 local frame = nil
+local warning = false;
 
 BINDING_NAME_SIMPLECOMBATMUSIC_NEXTSONG = 'Play Next Song'	
 
 function PlaySong(self, type)
 
-	if SongCountTotal == nil then
-		print "Simple Combat Music: Please set number in Addon Options"
-		return nil
+	if (SongCountTotal == nil or SongCountTotal == '' or SongCountTotal == '0') then
+		if (warning == false) then
+			print "Simple Combat Music: Please set Song Total in Addon Options"
+			warning = true
+		end
+		return false
+	else
+
+		type = type or 'song'
+
+		local fullPath = "Interface\\Music\\Battles" .. "\\" .. type .. random(1, SongCountTotal) ..  ".mp3"
+		local song = PlayMusic(fullPath)
+		local unitName = UnitName('target')
+		local bossMode = UnitIsBossMob('target')
+		return song
 	end
-
-	type = type or 'song'
-
-	local fullPath = "Interface\\Music\\Battles" .. "\\" .. type .. random(1, SongCountTotal) ..  ".mp3"
-	local song = PlayMusic(fullPath)
-	local unitName = UnitName('target')
-	local bossMode = UnitIsBossMob('target')
-	return song
 end
 
 function PlaySimpleCombatSong() 
 	PlaySong()
-	print('Playing random song....')
+	print('Simple Combat Music: Playing random song....')
 end
 
 local function OnAddonEvent(self, event, arg1)
@@ -45,6 +50,10 @@ local function OnAddonEvent(self, event, arg1)
 		editFrame:SetMultiLine(1000);
 		editFrame:SetNumeric(true)
 
+		if (SongCountTotal == nil or SongCountTotal == '') then
+			SongCountTotal = '0'
+		end
+
 		if SongCountTotal ~= nil then
 			editFrame:SetText(SongCountTotal)
 		end
@@ -58,6 +67,11 @@ local function OnAddonEvent(self, event, arg1)
 		helloFSS:SetPoint("TOPLEFT", panel, 0, -60);
 		helloFSS:SetText("Combat Volume")
 
+		SongCountMusicVolume = tonumber(SongCountMusicVolume)
+		if SongCountMusicVolume == nil or SongCountMusicVolume > 1 or SongCountMusicVolume < 0 then
+			SongCountMusicVolume = 1
+		end
+
 		local MySlider = CreateFrame("Slider", "MySliderSimpleCombatMusic", panel, "OptionsSliderTemplate")
 		MySlider:SetWidth(200)
 		MySlider:SetHeight(20)
@@ -70,12 +84,7 @@ local function OnAddonEvent(self, event, arg1)
 		MySlider:SetValueStep(0.1)
 		MySlider:Show()
 		MySlider:SetPoint("TOPLEFT", panel, 120, -59);
-
-		SongCountMusicVolume = tonumber(SongCountMusicVolume)
-		if SongCountMusicVolume == nil or SongCountMusicVolume > 1 or SongCountMusicVolume < 0 then
-			SongCountMusicVolume = 1
-		end
-
+		
 		MySlider:SetValue(SongCountMusicVolume)
 			
 		MySlider:SetScript("OnValueChanged", function(self)
